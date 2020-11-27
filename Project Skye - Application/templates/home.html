@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <title>HomeGrownCloud</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--All the links needed for Bootstrap 4-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src = "http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        
+        <link rel="icon" href="../static/Photos/favicon.png">
+        <!--Creates the background image of the webpage-->
+        <style
+            >body{
+                min-height: 100vh;
+                background-image: url("../static/Photos/login-background.jpg"); 
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            } 
+        </style>
+        <!--Prevents the user from using the browsers back button-->
+        <script language="javascript">
+            $(document).ready(function() {
+                function disablePrev(){ 
+                    window.history.forward() 
+                }
+                window.onload = disablePrev();
+                window.onpageshow = function(evt){ 
+                    if (evt.persisted) disableBack() 
+                }
+            });
+        </script>
+    </head>
+
+    <body>
+
+        <!--This is the header section-->
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark" style="opacity: 0.9;">
+            <a class="navbar-brand" href="#">
+                <form action="backFolder" method="POST">
+                    <input type="submit" value="&crarr; Page Before" class="btn btn-danger">
+                </form>
+            </a>
+            <!--This is the files section-->
+            <a style="color: white;">HomeGrownCloud</a>
+        </nav>
+
+         
+        <div class="container-fluid mt-2 mb-2">
+            <div class="row">
+        <!--Adding a new folder-->
+        <div class="dropdown mx-3">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+              Add Folder
+            </button>
+            <div class="dropdown-menu text-center">
+                <form enctype="multipart/form-data" action="folderCreation" method="POST" class="text-center">
+                    <input type="text" placeholder="Name" name="folderName" class="form-control" style="width: 90%; margin: 0 auto; margin-top: 10px;" required>
+                    <input type="submit" value="Add" class="btn btn-danger" style="width: 90%; margin: 10px 0px">
+                </form>
+            </div>
+        </div>
+            
+    
+        <!--Adding a new file-->
+        <div class="dropdown">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+              Add File
+            </button>
+            <div class="dropdown-menu text-center">
+                <form enctype="multipart/form-data" action="fileUpload" method="POST">
+                    <div class="custom-file" style="width: 90%; margin-top: 10px;">
+                        <input type="file" class="custom-file-input" id="customFile" name="files" required>
+                        <label class="custom-file-label" for="customFile"></label>
+                    </div>
+                    <input type="submit" value="Add" class="btn btn-danger" style="width: 90%; margin: 10px 0px">
+                </form>
+            </div>
+        </div>
+            </div>
+        </div>
+
+
+        <div class="container-fluid" style="opacity: 0.9;">
+            <!--Displaying the files-->
+            <div id="mainShow">
+                <table class="table table-hover bg-white text-center">
+                    <thead>
+                        <tr>
+                        <th>File Name</th>
+                        <th>Type</th>
+                        <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for file in files %}
+                        <tr>
+                            <td id="{{file}}3" class="text-center"><h5 class="lead">{{file}}</h5></td>
+                            <td id="{{file}}4"><img src="../static/Photos/file.png" id="{{file}}" height="30px" width="30px"></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="dropdown-toggle bg-info rounded-3" data-toggle="dropdown" style="border: none;"></button>
+                                    <div class="dropdown-menu">
+                                        <a href="/delete?file={{file}}" class="dropdown-item"><p>Delete</p></a>
+                                        <a href="/downloadFile?file={{file}}" id="{{file}}1" class="dropdown-item"><p>Download</p></a>
+                                        <a href="/view?file={{file}}" id="{{file}}2" class="dropdown-item"><p>View</p></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--This is the code used to edit the file/folder as they are sent-->
+                        <script language="javascript">
+                            fileName = '{{file}}';
+                            if(fileName.indexOf(".") == -1){
+                                document.getElementById("{{file}}").src = "../static/Photos/folder.png";
+                                document.getElementById("{{file}}3").addEventListener("click", function(){
+                                    document.body.innerHTML = "<form id='subForm' method='POST' action='subFolder' hidden><input type='text' value='{{file}}' name='subFolder'></form>";
+                                    document.getElementById("subForm").submit();
+                                });
+                                document.getElementById("{{file}}4").addEventListener("click", function(){
+                                    document.body.innerHTML = "<form id='subForm' method='POST' action='subFolder' hidden><input type='text' value='{{file}}' name='subFolder'></form>";
+                                    document.getElementById("subForm").submit();
+                                });
+                            }
+                            else if (fileName.charAt(fileName.length - 1) == "p" && fileName.charAt(fileName.length - 2) == "i" && fileName.charAt(fileName.length - 3) =="z"){
+                                document.getElementById("{{file}}").src = "../static/Photos/zip.png";
+                            }
+                        </script>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
