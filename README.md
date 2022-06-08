@@ -1,3 +1,2 @@
-# ProjectSkye
-This is my final year project. My idea was to create a very simple self-setup cloud storage solution that anyone could install on their own device and quickly turn that device into a cloud storage server.
-The languages used here are python and HTML/Javascript/JQuery/css.
+# Dissertation Project
+This is the project I created for my final year dissertation at NTU. Its a self hosted cloud storage application, designed to allow a user with very little knowledge to install and setup in one or two clicks (more if they want it to be useable outside of their local network). This project ran alongside a research paper about the decline and pros and cons of owning versus renting data.
